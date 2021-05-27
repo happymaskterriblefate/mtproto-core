@@ -105,6 +105,7 @@ class RPC {
         if (updatesEvents.includes(event)) {
           this.context.off('newListener', newListenerHandler);
           try {
+            // This request will subscribe the connection to updates from telegram's server.
             const state = await this.call('updates.getState');
             this.context.updates.emit('updateState', state);
           } catch (error) {
@@ -116,7 +117,6 @@ class RPC {
       }
       this.context.updates.on('newListener', newListenerHandler);
 
-      // This request is necessary to ensure that you start interacting with the server. If we have not made any request, the server will not send us updates.
     } else {
       this.nonce = this.crypto.getRandomBytes(16);
       this.handleMessage = this.handlePQResponse;
